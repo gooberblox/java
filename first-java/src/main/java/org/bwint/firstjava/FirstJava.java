@@ -69,6 +69,7 @@ class Board {
     }
 
     public int checkWin() {
+        // -1: nothing
         // 1: win
         // 2: lose
         // 3: tie
@@ -123,9 +124,11 @@ class Board {
                 return 1;
             }
         }
-        
-        return 2;
+        if(!boardList.contains("-")) {
+            return 3; // if theres no more spaces left tie
+        }
 
+        return -1;
     }
 }
 
@@ -152,8 +155,7 @@ public class FirstJava {
         if (s == 1) {
             // playing against computer
             usingComputerOpponent = true;
-
-            
+ 
             // while loop so i can repeat incase they get it wrong
             while (true) {
                 System.out.println("Playing against the computer\nEnter difficulty(1 for easy, 2 for medium, 3 for hard): ");
@@ -192,7 +194,7 @@ public class FirstJava {
             // computer/other person's move
             if (usingComputerOpponent) {
                 // update board and call new turn
-                opponent.updateBoard(game.boardList);
+                opponent.updateBoard(game.boardList); // causes dereferencing null pointer err but it wont happen
                 game.addCircle(opponent.opponentTurn());
             } else {
                 game.PrintBoard();
@@ -207,9 +209,23 @@ public class FirstJava {
                 }
             }
 
-            if (game.checkWin() == 2) {
-                game.PrintBoard();
-                break;
+            int outcome = game.checkWin();
+            if(outcome > 0) {
+                switch (outcome) {
+                    case 1 -> {
+                        System.out.println("Player 1 wins!");
+                    }
+                    case 2 -> {
+                        if (usingComputerOpponent) {
+                            System.out.println("the computer wins.");
+                        } else {
+                            System.out.println("Player 2 wins!");
+                        }
+                    }
+                    case 3 -> {
+                        System.out.println("Tie!");
+                    } 
+                }
             }
 
         }

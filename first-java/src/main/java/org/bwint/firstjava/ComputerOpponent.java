@@ -3,6 +3,7 @@ package org.bwint.firstjava;
 import java.util.List;
 
 public class ComputerOpponent {
+    
 
     int difficulty;
     List<String> gameBoard;
@@ -46,10 +47,10 @@ public class ComputerOpponent {
         if (pos1.equals(pos2) && pos3.equals("-") && pos1.equals(thing)) {
             return c;
 
-        } else if (pos2.equals(pos3) && pos1.equals("-") && !pos2.equals(thing)) {
+        } else if (pos2.equals(pos3) && pos1.equals("-") && pos2.equals(thing)) {
             return a;
 
-        } else if (pos1.equals(pos3) && pos2.equals("-") && !pos3.equals(thing)) {
+        } else if (pos1.equals(pos3) && pos2.equals("-") && pos3.equals(thing)) {
             return b;
         }
         return -1;
@@ -79,50 +80,54 @@ public class ComputerOpponent {
                 second = (i * 3) + 1;
                 third = (i * 3) + 2;
 
-                outcome = winPossible(first, second, third,currentThing);
-                if(outcome > -1) return outcome;
+                outcome = winPossible(first, second, third, currentThing);
+                if (outcome > -1) return outcome;
             }
 
             // checking vertical
             for (int i = 0; i < 3; i++) {
                 first = i;
-                second = i+3;
-                third = i+6;
+                second = i + 3;
+                third = i + 6;
 
                 outcome = winPossible(first, second, third, currentThing);
-                if(outcome > -1) return outcome;
+                if (outcome > -1) return outcome;
             }
 
             // checking diagonals
             for (int i = 0; i < 2; i++) {
-                first = i+i; // at 0 it's 0, and at 1 its 2
+                first = i + i; // at 0 it's 0, and at 1 its 2
                 second = 4; // middle square
-                third = 8-(i+i); // reverse of the first two rows lower
+                third = 8 - (i + i); // reverse of the first two rows lower
 
                 outcome = winPossible(first, second, third, currentThing);
-                if(outcome > -1) return outcome;
+                if (outcome > -1) return outcome;
+
+            }
+            // now onto picking center -> corner -> side
+            if (gameBoard.get(4).equals("-")) {
+                return 4;
+            } // an else is redundant here
+
+            int[] corners = {0, 2, 6, 8}; // arrays just make my life easier here
+            for (int i = 0; i < 4; i++) {
+                int current = corners[i]; // goes top left -> top right -> bottom left -> bottom right
+                if (gameBoard.get(current).equals("-")) {
+                    return current; // if a corner is empty take it
+
+                            }}
+
+            int[] sides = {1, 3, 5, 7};
+            // same stuff as before
+            for (int i = 0; i < 4; i++) {
+                int current = sides[i];
+                if (gameBoard.get(current).equals("-")) {
+                    return current;
+                }
             }
 
+            
         }
-        // now onto picking center -> corner -> side
-        if(gameBoard.get(4).equals("-")) {
-            return 4;
-        } // an else is redundant here
-
-        int[] corners = {0,2,6,8}; // arrays just make my life easier here
-        for (int i = 0; i < 4; i++) {
-            int current = corners[i]; // goes top left -> top right -> bottom left -> bottom right
-            if(gameBoard.get(current).equals("-")) return current; // if a corner is empty take it
-        }
-
-        int[] sides = {1,3,5,7};
-        // same stuff as before
-        for (int i = 0; i < 4; i++) {
-            int current = sides[i];
-            if(gameBoard.get(current).equals("-")) return current; 
-        }
-
-
         return 0;
     }
 
